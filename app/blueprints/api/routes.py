@@ -14,10 +14,12 @@ def login():
     json_data = request.get_json()
     email = json_data['email']
     password = json_data['password']
+    if email == "":
+        return jsonify({'email' : "Must not be empty", 'status_code':400}), status.HTTP_400_BAD_REQUEST
+    elif password == "":
+        return jsonify({'password' : "Must not be empty", 'status_code':400}), status.HTTP_400_BAD_REQUEST
     user = guard.authenticate(email, password)
     token = guard.encode_jwt_token(user)
-    
-    print(token)
     return jsonify({'access_token' : token})
 
 @api.route('/register', methods=['POST'])
@@ -50,6 +52,7 @@ def register():
         token = guard.encode_jwt_token(user)
 
         return jsonify({'access_token' : token}), status.HTTP_201_CREATED
+
 
 
 @api.route('/protected')
