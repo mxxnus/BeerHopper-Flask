@@ -25,14 +25,32 @@ def login():
 @api.route('/register', methods=['POST'])
 def register():
     json_data = request.get_json()
-    email = json_data['email'].lower()
-    username = json_data['username'].lower()
+    
+    email = json_data['email']
+    if email == "":
+        return jsonify({'email' : "Must not be empty", 'status_code':400}), status.HTTP_400_BAD_REQUEST
+
     password = json_data['password']
+    if password == "":
+        return jsonify({'password' : "Must not be empty", 'status_code':400}), status.HTTP_400_BAD_REQUEST
+
     confirmPassword = json_data['confirmPassword']
+    if confirmPassword == "":
+        return jsonify({'confirmPassword' : "Must not be empty", 'status_code':400}), status.HTTP_400_BAD_REQUEST
+
     fname = json_data['fname']
+    if fname == "":
+        return jsonify({'fname' : "Must not be empty", 'status_code':400}), status.HTTP_400_BAD_REQUEST
+
     lname = json_data['lname']
+    if lname == "":
+        return jsonify({'lname' : "Must not be empty", 'status_code':400}), status.HTTP_400_BAD_REQUEST
+
     organization_id = json_data['organization_id']
-    user = User(email=email , fname=fname, lname=lname,
+    if organization_id == "":
+        return jsonify({'organization_id' : "Must not be empty", 'status_code':400}), status.HTTP_400_BAD_REQUEST
+
+    user = User(email=email.lower() , fname=fname, lname=lname,
     organization_id=organization_id, password=guard.hash_password(password))
 
     #print(type(user.identify))
