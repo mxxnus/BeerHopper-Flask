@@ -18,7 +18,11 @@ class User(db.Model):
 
     @classmethod
     def lookup(cls, email):
-        return cls.query.filter_by(email=email).one_or_none()
+        return cls.query.filter_by(email=email.lower()).one_or_none()
+
+    @classmethod
+    def username_lookup(cls, username):
+        return cls.query.filter_by(username=username.lower()).one_or_none()
 
     @classmethod
     def identify(cls, id):

@@ -1,11 +1,11 @@
 from flask import Flask
 from flask_dotenv import DotEnv
+from flask_api import FlaskAPI
 
 import os
 from config import Config
 
 from .extensions import db, guard, migrate
-
 
 from .commands import create_users, create_database
 
@@ -14,7 +14,7 @@ from .models import User
 basedir = os.path.dirname(os.path.abspath(__file__))
 
 def create_app(config_class=Config):
-    app = Flask(__name__)
+    app = FlaskAPI(__name__)
     
     app.config.from_object(config_class)
 
