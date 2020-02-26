@@ -35,13 +35,13 @@ def register():
 
     #print(type(user.identify))
     if password != confirmPassword:
-        return jsonify({'error' : 'Passwords must match'}), status.HTTP_400_BAD_REQUEST
+        return jsonify({'error' : "AuthenticationError", "message":"Passwords must match",'status_code':400}), status.HTTP_400_BAD_REQUEST
 
     elif user.lookup(user.email) != None:
-        return jsonify({'error' : 'Email already is use'}), status.HTTP_400_BAD_REQUEST
+        return jsonify({'error' : "AuthenticationError", "message":"Email is already is use",'status_code':400}), status.HTTP_400_BAD_REQUEST
 
     elif user.username_lookup(user.username) != None:
-        return jsonify({'error' : 'Username already is use'}), status.HTTP_400_BAD_REQUEST
+        return jsonify({'error' : "AuthenticationError", "message":"Username is already is use",'status_code':400}), status.HTTP_400_BAD_REQUEST
 
     elif password == confirmPassword and user.lookup(user.email) == None:
         db.session.add(user)
