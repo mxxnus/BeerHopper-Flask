@@ -32,7 +32,7 @@ def register():
     fname = json_data['fname']
     lname = json_data['lname']
     organization_id = json_data['organization_id']
-    user = User(username=username, email=email , fname=fname, lname=lname,
+    user = User(email=email , fname=fname, lname=lname,
     organization_id=organization_id, password=guard.hash_password(password))
 
     #print(type(user.identify))
@@ -42,9 +42,7 @@ def register():
     elif user.lookup(user.email) != None:
         return jsonify({'error' : "AuthenticationError", "message":"Email is already is use",'status_code':400}), status.HTTP_400_BAD_REQUEST
 
-    elif user.username_lookup(user.username) != None:
-        return jsonify({'error' : "AuthenticationError", "message":"Username is already is use",'status_code':400}), status.HTTP_400_BAD_REQUEST
-
+    
     elif password == confirmPassword and user.lookup(user.email) == None:
         db.session.add(user)
         db.session.commit()

@@ -12,9 +12,9 @@ def create_database():
 @click.command(name='create_users')
 @with_appcontext
 def create_users():
-    one = User(username='one',     email="user1@email.com" , fname="Derek", lname="Moon", organization_id=1, password=guard.hash_password('one'))
-    two = User(username='two',     email="user2@email.com" , fname="Chad", lname="Coomes", organization_id=1, password=guard.hash_password('two'))
-    three = User(username='three', email="user3@email.com" , fname="George", lname="Troutman", organization_id=1, password=guard.hash_password('three'))
+    one = User(email="user1@email.com" , fname="Derek", lname="Moon", organization_id=1, password=guard.hash_password('one'))
+    two = User(email="user2@email.com" , fname="Chad", lname="Coomes", organization_id=1, password=guard.hash_password('two'))
+    three = User(email="user3@email.com" , fname="George", lname="Troutman", organization_id=1, password=guard.hash_password('three'))
 
     db.session.add_all([one, two, three])
     db.session.commit()
