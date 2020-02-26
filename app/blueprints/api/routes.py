@@ -4,7 +4,7 @@ from flask_api import status
 from app.blueprints.api import api
 
 from flask_praetorian import auth_required
-from app.extensions import guard
+from app.extensions import guard, db
 
 from app.models import User
 
@@ -23,8 +23,8 @@ def login():
 @api.route('/register', methods=['POST'])
 def register():
     json_data = request.get_json()
-    email = json_data['email']
-    username = json_data['username']
+    email = json_data['email'].lower()
+    username = json_data['username'].lower()
     password = json_data['password']
     confirmPassword = json_data['confirmPassword']
     fname = json_data['fname']
@@ -44,7 +44,12 @@ def register():
         return jsonify({'error' : 'Username already is use'}), status.HTTP_400_BAD_REQUEST
 
     elif password == confirmPassword and user.lookup(user.email) == None:
-        return jsonify({'result' : 'Hello'}), status.HTTP_201_CREATED
+        db.session.add(user)
+        db.session.commit()
+        user = guard.authenticate(email, password)
+        token = guard.encode_jwt_token(user)
+
+        return jsonify({'access_token' : token}), status.HTTP_201_CREATED
 
 
 @api.route('/protected')
