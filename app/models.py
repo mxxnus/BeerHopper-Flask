@@ -12,8 +12,19 @@ class User(db.Model):
     organization_id = db.Column(db.Integer, nullable=False)
     created_on = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
-    #def __repr__(self):
-        #return f"<User:{self.name} | {self.email}>"
+    def __repr__(self):
+        return f"<User:{self.email} | {self.fname}>"
+
+    def infoDict(self):
+        data = dict(
+            id=self.id,
+            fname=self.fname,
+            lname=self.lname,
+            email=self.email,
+            organization_id = self.organization_id,
+            created_on=self.created_on
+        )
+        return data
 
     @classmethod
     def lookup(cls, email):

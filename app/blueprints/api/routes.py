@@ -74,6 +74,13 @@ def register():
 
 
 
+@api.route('/user/<int:id>')
+def getUser(id):
+    user = User.query.get(id)
+    credentials = user.infoDict()
+    return jsonify({'credentials':credentials})
+
+       
 @api.route('/protected')
 @auth_required
 def protected():
