@@ -64,6 +64,7 @@ class Brewery(db.Model):
             id=self.id,
             name=self.name,
             email=self.email,
+            website=self.website,
             address=self.address,
             city=self.city,
             state=self.state,

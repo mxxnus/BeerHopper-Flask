@@ -28,3 +28,4 @@ def create_breweries():
 
     db.session.add_all([one, two, three])
     db.session.commit()
+    
