@@ -57,7 +57,6 @@ class Brewery(db.Model):
     zipcode= db.Column(db.String(50), nullable=False)
     created_on = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
-    #beers = db.relationship(Beer, order_by = Beer.id, back_populates = 'beer')
 
     def __repr__(self):
         return f"<User:{self.email} | {self.fname}>"
@@ -97,10 +96,15 @@ class Brewery(db.Model):
 class Beer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    created_on = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow),
+    cost_sixth = db.Column(db.Float, nullable=False)
+    cost_50=db.Column(db.Float, nullable=False)
+    cost_half=db.Column(db.Float, nullable=False)
+    cost_case=db.Column(db.Float, nullable=False)
+    
+    
     brewery_id = db.Column(db.Integer, db.ForeignKey("brewery.id"))
-    brewery = db.relationship("Brewey", back_populates="beers")
+    brewery = db.relationship("Brewery", back_populates="beer")
+    
     def __repr__(self):
         return f"<User:{self.email} | {self.fname}>"
 
@@ -108,19 +112,10 @@ class Beer(db.Model):
         data = dict(
             id = self.id,
             name=self.name,
-            email=self.email,
-            website=self.website,
-            address=self.address,
-            city=self.city,
-            state=self.state,
-            zipcode=self.zipcode,
-            created_on=self.created_on
         )
         return data
 
-    @classmethod
-    def lookup(cls, email):
-        return cls.query.filter_by(email=email.lower()).one_or_none()
+    
 
    
     @classmethod
@@ -135,3 +130,4 @@ class Beer(db.Model):
     def identity(self):
         return self.id
 
+Brewery.beer = db.relationship("Beer", order_by = Beer.id, back_populates = 'brewery')
