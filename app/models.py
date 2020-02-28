@@ -2,7 +2,6 @@ from app import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 
-
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(180), nullable=False)
@@ -93,6 +92,10 @@ class Brewery(db.Model):
         return self.id
 
 
+#beer = db.Table("beer",
+    #db.column('brewery_id', db.Integer,db.ForeignKey('brewery.id'))
+#)
+
 class Beer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -109,15 +112,24 @@ class Beer(db.Model):
         return f"<User:{self.email} | {self.fname}>"
 
     def infoDict(self):
+        #j = Brewery.query.join(
+                #beer,
+                #beer.c.brewery_id == brewery.c.id
+            #).select().where(brewery.c.id==self.brewery_id)
+        #print(j)
+    
         data = dict(
             id = self.id,
             name=self.name,
+            cost_sixth=self.cost_sixth,
+            cost_50=self.cost_50,
+            cost_half=self.cost_half,
+            cost_case=self.cost_case,
+            #brewery=
         )
         return data
 
     
-
-   
     @classmethod
     def identify(cls, id):
         return cls.query.filter_by(id=id).one_or_none()

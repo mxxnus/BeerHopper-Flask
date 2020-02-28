@@ -9,7 +9,7 @@ from .extensions import db, guard, migrate
 
 from .commands import create_users, create_database, create_breweries, create_beers
 
-from .models import User, Brewery 
+from .models import User, Brewery, Beer
 
 basedir = os.path.dirname(os.path.abspath(__file__))
 
@@ -28,6 +28,7 @@ def create_app(config_class=Config):
     app.cli.add_command(create_database)
     app.cli.add_command(create_breweries)
     app.cli.add_command(create_beers)
+    
     from app.blueprints.api import api
     app.register_blueprint(api, url_prefix='/api')
 
