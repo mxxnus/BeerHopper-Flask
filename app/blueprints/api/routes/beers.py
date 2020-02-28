@@ -10,8 +10,9 @@ from app.models import User, Brewery, Beer
 
 @api.route('/beers', methods=['GET'])
 def beers():
-
-    beers= [i.infoDict() for i in Beer.query.all()]
+    #[i.infoDict() for i in Beer.query.all()]
+    beers= [i.infoDict() for i in db.session.query(Beer).join(Brewery, 
+    Brewery.id == Beer.brewery_id).all()]
     
     return jsonify(beers)
     

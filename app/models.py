@@ -112,11 +112,7 @@ class Beer(db.Model):
         return f"<User:{self.email} | {self.fname}>"
 
     def infoDict(self):
-        #j = Brewery.query.join(
-                #beer,
-                #beer.c.brewery_id == brewery.c.id
-            #).select().where(brewery.c.id==self.brewery_id)
-        #print(j)
+        
     
         data = dict(
             id = self.id,
@@ -125,7 +121,7 @@ class Beer(db.Model):
             cost_50=self.cost_50,
             cost_half=self.cost_half,
             cost_case=self.cost_case,
-            #brewery=
+            brewery=self.brewery.name
         )
         return data
 
