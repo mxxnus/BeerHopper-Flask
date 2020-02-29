@@ -1,5 +1,5 @@
 from app import db
-from datetime import datetime
+from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
@@ -8,7 +8,10 @@ class User(db.Model):
     fname = db.Column(db.String(50), nullable=False)
     lname = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), nullable=False, unique=True)
-    organization_id = db.Column(db.Integer, nullable=False)
+
+    address_id = db.Column(db.Integer, nullable=False)
+    address = db.relationship("Address", back_populates="user")
+
     created_on = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
     def __repr__(self):
@@ -20,7 +23,7 @@ class User(db.Model):
             fname=self.fname,
             lname=self.lname,
             email=self.email,
-            organization_id = self.organization_id,
+            address=self.address.id,
             created_on=self.created_on
         )
         return data
@@ -180,8 +183,123 @@ class Inventory(db.Model):
     @property
     def identity(self):
         return self.id
+    
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, nullable=False)
+    item = db.Column(db.String(50), nullable=False)
+    
+    quantity=db.Column(db.Integer, nullable=False)
+
+    created_on = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
+    delivery_date = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow() + timedelta(days=3)) 
+
+    status = db.Column(db.String(50), nullable=False)
+    
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = db.relationship("User", back_populates="order")
+
+    beer_id = db.Column(db.Integer, db.ForeignKey("beer.id"))
+    beer = db.relationship("Beer", back_populates="order")
+
+    brewery_id = db.Column(db.Integer, db.ForeignKey("brewery.id"))
+    brewery = db.relationship("Brewery", back_populates="order")
+    
+    def __repr__(self):
+        return f"<User:{self.id}"
+
+    def infoDict(self):
+        data = dict(
+            id = self.id,
+            order_id=self.order_id,
+            item=self.item,
+            quantity=self.quantity,
+            delivery_data=self.delivery_date,
+            user_id = self.user.id,
+            #user address
+
+            brewery_id=self.brewery.id,
+            brewery=self.brewery.name,
+            brewery_address= self.brewery.address,
+            brewery_city= self.brewery.city,
+            brewery_state= self.brewery.state,
+            brewery_zipcode= self.brewery.zipcode,
+            brewery_email= self.brewery.email,
+
+            beer_id=self.beer.id,
+            beer_name=self.beer.name
+        )
+        return data
+
+    
+    @classmethod
+    def identify(cls, id):
+        return cls.query.filter_by(id=id).one_or_none()
+
+    @property
+    def rolenames(self):
+        return []
+
+    @property
+    def identity(self):
+        return self.id
+
+
+class Address(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    address = db.Column(db.String(50), nullable=False)
+    city= db.Column(db.String(50), nullable=False)
+    state= db.Column(db.String(50), nullable=False)
+    zipcode= db.Column(db.String(50), nullable=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = db.relationship("User", back_populates="address")
+
+    def infoDict(self):
+        data = dict(
+            id = self.id,
+            user_id=self.user.id,
+            address=self.address,
+            city=self.city,
+            state=self.state,
+            zipcode=self.zipcode,
+            created_on=self.created_on
+        )
+        return data
+
+    @classmethod
+    def lookup(cls, email):
+        return cls.query.filter_by(email=email.lower()).one_or_none()
+
+   
+    @classmethod
+    def identify(cls, id):
+        return cls.query.filter_by(id=id).one_or_none()
+
+    @property
+    def rolenames(self):
+        return []
+
+    @property
+    def identity(self):
+        return self.id
+
 
 Brewery.beer = db.relationship("Beer", order_by = Beer.id, back_populates = 'brewery')
-
 Brewery.inventory = db.relationship("Inventory", order_by = Inventory.id, back_populates = 'brewery')
+Brewery.order =  db.relationship("Order", order_by = Order.id, back_populates = 'brewery')
+
 Beer.inventory = db.relationship("Inventory", order_by = Inventory.id, back_populates = 'beer')
+Beer.order = db.relationship("Order", order_by = Order.id, back_populates = 'beer')
+
+User.order = db.relationship("Order", order_by = Order.id, back_populates = 'user')
+User.address = db.relationship("Address", order_by = Address.id, back_populates = 'user')
+
+Address.user = db.relationship("User", order_by = User.id, back_populates = 'address')
+
+
+
+
