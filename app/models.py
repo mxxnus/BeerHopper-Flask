@@ -207,6 +207,9 @@ class Order(db.Model):
 
     brewery_id = db.Column(db.Integer, db.ForeignKey("brewery.id"))
     brewery = db.relationship("Brewery", back_populates="order")
+
+    address_id = db.Column(db.Integer, db.ForeignKey("address.id"))
+    address = db.relationship("Address", back_populates="order")
     
     def __repr__(self):
         return f"<User:{self.id}"
@@ -299,7 +302,7 @@ User.order = db.relationship("Order", order_by = Order.id, back_populates = 'use
 User.address = db.relationship("Address", order_by = Address.id, back_populates = 'user')
 
 Address.user = db.relationship("User", order_by = User.id, back_populates = 'address')
-
+Address.order = db.relationship("Order", order_by = Order.id, back_populates = 'address')
 
 
 
