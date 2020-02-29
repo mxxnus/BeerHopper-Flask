@@ -104,7 +104,6 @@ class Beer(db.Model):
     cost_half=db.Column(db.Float, nullable=False)
     cost_case=db.Column(db.Float, nullable=False)
     
-    
     brewery_id = db.Column(db.Integer, db.ForeignKey("brewery.id"))
     brewery = db.relationship("Brewery", back_populates="beer")
     
@@ -138,4 +137,49 @@ class Beer(db.Model):
     def identity(self):
         return self.id
 
+
+class Inventory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sixth = db.Column(db.Integer, nullable=False)
+    L50=db.Column(db.Integer, nullable=False)
+    half=db.Column(db.Integer, nullable=False)
+    case=db.Column(db.Integer, nullable=False)
+    
+    beer_id = db.Column(db.Integer, db.ForeignKey("beer.id"))
+    beer = db.relationship("Beer", back_populates="inventory")
+
+    brewery_id = db.Column(db.Integer, db.ForeignKey("brewery.id"))
+    brewery = db.relationship("Brewery", back_populates="inventory")
+    
+    def __repr__(self):
+        return f"<User:{self.id}"
+
+    def infoDict(self):
+        data = dict(
+            id = self.id,
+            sixth=self.sixth,
+            L50=self.L50,
+            half=self.half,
+            case=self.case,
+            #brewery=self.brewery.name,
+            #name=self.beer.name
+        )
+        return data
+
+    
+    @classmethod
+    def identify(cls, id):
+        return cls.query.filter_by(id=id).one_or_none()
+
+    @property
+    def rolenames(self):
+        return []
+
+    @property
+    def identity(self):
+        return self.id
+
 Brewery.beer = db.relationship("Beer", order_by = Beer.id, back_populates = 'brewery')
+
+Brewery.inventory = db.relationship("Inventory", order_by = Inventory.id, back_populates = 'brewery')
+Beer.inventory = db.relationship("Inventory", order_by = Inventory.id, back_populates = 'beer')
