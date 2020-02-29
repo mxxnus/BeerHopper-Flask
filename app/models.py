@@ -161,8 +161,10 @@ class Inventory(db.Model):
             L50=self.L50,
             half=self.half,
             case=self.case,
-            #brewery=self.brewery.name,
-            #name=self.beer.name
+            brewery_id=self.brewery.id,
+            brewery=self.brewery.name,
+            beer_id=self.beer.id,
+            beer_name=self.beer.name
         )
         return data
 
