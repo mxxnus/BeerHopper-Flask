@@ -10,8 +10,14 @@ from app.models import User, Brewery, Beer, Inventory
 
 #@api.route('/orders/<int:id>', methods=['GET'])
 #def orders(id):
-  #  inven= [i.infoDict() for i in db.session.query(Inventory).join(Brewery, 
+  # inven= [i.infoDict() for i in db.session.query(Inventory).join(Brewery, 
     #Brewery.id == Inventory.brewery_id).join(Beer, Beer.id == Inventory.beer_id).all()]
     
     #return jsonify(inven)
 
+
+#CREATE AN ORDER
+#generate order_id timestamp + random stuff
+#cost calc with order/beer_id/item/quantity * query(beer_id.cost)
+#add to db
+#modify inventory (same beer_id)

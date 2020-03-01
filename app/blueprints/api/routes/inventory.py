@@ -15,3 +15,17 @@ def inventory():
     
     return jsonify(inven)
 
+
+
+#CHANGE BEER INVENTORY STOCK W/ POST 
+
+#/inventory/<int:beer_id>/L50/modify
+
+#/inventory/<int:beer_id>/half/modify
+
+#/inventory/<int:beer_id>/sixth/modify
+
+#/inventory/<int:beer_id>/case/modify
+
+
+

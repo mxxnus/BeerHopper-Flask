@@ -15,5 +15,7 @@ def beers():
     Brewery.id == Beer.brewery_id).all()]
     
     return jsonify(beers)
-    
+
+#change the price    
+#/beer/beer_id/
 
