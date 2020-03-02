@@ -154,8 +154,8 @@ class Inventory(db.Model):
     brewery_id = db.Column(db.Integer, db.ForeignKey("brewery.id"))
     brewery = db.relationship("Brewery", back_populates="inventory")
     
-    def __repr__(self):
-        return f"<User:{self.id}"
+    #def __repr__(self):
+        #return f"<User:{self.id}"
 
     def infoDict(self):
         data = dict(
@@ -165,9 +165,7 @@ class Inventory(db.Model):
             half=self.half,
             case=self.case,
             brewery_id=self.brewery.id,
-            brewery=self.brewery.name,
             beer_id=self.beer.id,
-            beer_name=self.beer.name
         )
         return data
 
