@@ -2,7 +2,7 @@ import click
 from flask.cli import with_appcontext 
 
 from .extensions import guard, db
-from .models import User, Brewery, Beer, Inventory
+from .models import User, Brewery, Beer, Inventory, Address, Order
 
 @click.command(name='create_database')
 @with_appcontext
@@ -45,6 +45,16 @@ def create_inventory():
     one = Inventory(brewery_id=8, sixth= 5, L50=10, half=0, case=45, beer_id=3,)
     two = Inventory(brewery_id=9, sixth=34 , L50=43, half=3, case=255, beer_id=4)
     three = Inventory(brewery_id=10, sixth=199, L50=323, half=23, case=899, beer_id=5)
+
+    db.session.add_all([one, two, three])
+    db.session.commit()
+
+@click.command(name='create_addresses')
+@with_appcontext
+def create_addresses():
+    one = Address(user_id=18,address="4205 Weaverton Lane",city="Columbus",state="Ohio", zipcode="43219")
+    two = Address(user_id=19,address="743 Parsons Ave",city="Columbus",state="Ohio", zipcode="43206")
+    three = Address(user_id=20,address="5511 New Albany Rd",city="New Albany",state="Ohio", zipcode="43054")
 
     db.session.add_all([one, two, three])
     db.session.commit()
