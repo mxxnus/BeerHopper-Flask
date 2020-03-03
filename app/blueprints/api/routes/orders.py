@@ -49,8 +49,30 @@ def createOrder():
 
     order = Order(order_number=order_number,item=item, quantity=quantity, cost=cost, fulfilled=False,
     user_id=user_id, beer_id=beer_id, brewery_id=brewery_id, address_id=address_id)
-    db.session.add(order)
-    db.session.commit()
+
+    #new_inventory = Inventory.query.filter(Inventory.beer_id == order.beer_id).first()
+    #new_inventory.getattr(Inventory,item) -= quantity
+    test = getattr(Inventory,item)
+    old_item_count = Inventory.query.filter_by(beer_id = order.beer_id).first().case
+
+    print(old_item_count)
+    print(test)
+
+
+
+    #db.session.query().filter(Inventory.beer_id == order.beer_id).update({test : getattr(Inventory,item) - quantity})
+    
+    #new_inventory = Inventory.query.filter(Inventory.beer_id == order.beer_id).first()
+
+    #new_item_quantity = getattr(Inventory,item) - quantity
+    #print(new_item_quantity)
+    #new_inventory = new_inventory.update(new_item_quantity)
+
+    #Inventory.query.filter(Inventory.beer_id == order.beer_id).first()
+    #inventory.getattr(Inventory, item) -= quantity
+    
+    #db.session.add(order)
+    #db.session.commit()
 
     return jsonify({'success' : "Order submitted successfully"}), status.HTTP_201_CREATED 
     

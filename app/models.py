@@ -188,8 +188,14 @@ class Inventory(db.Model):
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_number = db.Column(db.String(50), nullable=False)
-    item = db.Column(db.String(50), nullable=False)
-    quantity=db.Column(db.Integer, nullable=False)
+    
+    sixth_quantity=db.Column(db.Integer, nullable=False)
+    L50_quantity=db.Column(db.Integer, nullable=False)
+    half_quantity=db.Column(db.Integer, nullable=False)
+    case_quantity=db.Column(db.Integer, nullable=False)
+    
+
+
     cost=db.Column(db.Float, nullable=False)
 
     created_on = db.Column(db.DateTime, nullable=False,
