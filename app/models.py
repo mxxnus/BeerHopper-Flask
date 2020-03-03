@@ -187,17 +187,17 @@ class Inventory(db.Model):
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.String(50), nullable=False)
+    order_number = db.Column(db.String(50), nullable=False)
     item = db.Column(db.String(50), nullable=False)
     quantity=db.Column(db.Integer, nullable=False)
-    amount=db.Column(db.Float, nullable=False)
+    cost=db.Column(db.Float, nullable=False)
 
     created_on = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
     delivery_date = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow() + timedelta(days=3)) 
 
-    status = db.Column(db.String(50), nullable=False)
+    fulfilled = db.Column(db.Boolean, unique=False, nullable=False)
     
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     user = db.relationship("User", back_populates="order")
@@ -217,12 +217,14 @@ class Order(db.Model):
     def infoDict(self):
         data = dict(
             id = self.id,
-            order_id=self.order_id,
+            order_number=self.order_number,
 
             item=self.item,
             quantity=self.quantity,
-            amount = self.amount,
+            cost = self.cost,
             delivery_data=self.delivery_date,
+
+            fulfilled = self.fulfilled,
 
             beer_id=self.beer.id,
             beer_name=self.beer.name,

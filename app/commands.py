@@ -62,9 +62,9 @@ def create_addresses():
 @click.command(name='create_orders')
 @with_appcontext
 def create_orders():
-    one = Order(order_id="1",item="L50", quantity=3, amount=129.99, status="Unfullfilled",user_id=18, beer_id=3, brewery_id=8, address_id=1)
-    two = Order(order_id="1",item="case", quantity=5, amount=250.00, status="Unfullfilled",user_id=18, beer_id=3, brewery_id=8, address_id=1)
-    three = Order(order_id="1",item="case", quantity=10, amount=100, status="Unfullfilled",user_id=19, beer_id=5, brewery_id=10, address_id=2)
+    one = Order(order_number="1",item="L50", quantity=3, cost=129.99, fulfilled=False,user_id=18, beer_id=3, brewery_id=8, address_id=1)
+    two = Order(order_number="1",item="case", quantity=5, cost=250.00, fulfilled=False,user_id=18, beer_id=3, brewery_id=8, address_id=1)
+    three = Order(order_number="1",item="case", quantity=10, cost=100, fulfilled=False,user_id=19, beer_id=5, brewery_id=10, address_id=2)
 
     db.session.add_all([one, two, three])
     db.session.commit()
