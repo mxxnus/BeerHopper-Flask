@@ -154,8 +154,8 @@ class Inventory(db.Model):
     brewery_id = db.Column(db.Integer, db.ForeignKey("brewery.id"))
     brewery = db.relationship("Brewery", back_populates="inventory")
     
-    #def __repr__(self):
-        #return f"<User:{self.id}"
+    def __repr__(self):
+        return f"<User:{self.id}"
 
     def infoDict(self):
         data = dict(
@@ -165,7 +165,9 @@ class Inventory(db.Model):
             half=self.half,
             case=self.case,
             brewery_id=self.brewery.id,
+            brewery=self.brewery.name,
             beer_id=self.beer.id,
+            beer_name=self.beer.name
         )
         return data
 
@@ -185,7 +187,7 @@ class Inventory(db.Model):
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, nullable=False)
+    order_id = db.Column(db.String(50), nullable=False)
     item = db.Column(db.String(50), nullable=False)
     quantity=db.Column(db.Integer, nullable=False)
     amount=db.Column(db.Float, nullable=False)
@@ -216,11 +218,20 @@ class Order(db.Model):
         data = dict(
             id = self.id,
             order_id=self.order_id,
+
             item=self.item,
             quantity=self.quantity,
+            amount = self.amount,
             delivery_data=self.delivery_date,
+
+            beer_id=self.beer.id,
+            beer_name=self.beer.name,
+
             user_id = self.user.id,
-            #user address
+            user_address = self.address.address,
+            user_city = self.address.city,
+            user_state = self.address.state,
+            user_zipcode = self.address.zipcode,
 
             brewery_id=self.brewery.id,
             brewery=self.brewery.name,
@@ -228,10 +239,8 @@ class Order(db.Model):
             brewery_city= self.brewery.city,
             brewery_state= self.brewery.state,
             brewery_zipcode= self.brewery.zipcode,
-            brewery_email= self.brewery.email,
+            brewery_email= self.brewery.email
 
-            beer_id=self.beer.id,
-            beer_name=self.beer.name
         )
         return data
 
