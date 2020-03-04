@@ -23,7 +23,7 @@ class User(db.Model):
             fname=self.fname,
             lname=self.lname,
             email=self.email,
-            address=self.address.id,
+            address=self.address_id,
             created_on=self.created_on
         )
         return data
