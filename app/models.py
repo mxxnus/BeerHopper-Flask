@@ -143,6 +143,7 @@ class Beer(db.Model):
 
 class Inventory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
     sixth = db.Column(db.Integer, nullable=False)
     L50=db.Column(db.Integer, nullable=False)
     half=db.Column(db.Integer, nullable=False)
@@ -194,8 +195,6 @@ class Order(db.Model):
     half_quantity=db.Column(db.Integer, nullable=False)
     case_quantity=db.Column(db.Integer, nullable=False)
     
-
-
     cost=db.Column(db.Float, nullable=False)
 
     created_on = db.Column(db.DateTime, nullable=False,
@@ -225,8 +224,12 @@ class Order(db.Model):
             id = self.id,
             order_number=self.order_number,
 
-            item=self.item,
-            quantity=self.quantity,
+            
+            sixth_quantity=self.sixth_quantity,
+            half_quantity=self. half_quantity,
+            case_quantity=self.case_quantity,
+            L50_quantity=self.L50_quantity,
+
             cost = self.cost,
             delivery_data=self.delivery_date,
 

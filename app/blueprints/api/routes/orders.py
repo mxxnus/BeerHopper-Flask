@@ -36,9 +36,12 @@ def createOrder():
     order_number = ''.join(str(datetime.utcnow()).split())
     order_number = order_number[:10]
     order_number += randomStringDigits(6)
-    
-    item = json_data['item']
-    quantity = json_data['quantity']
+
+    sixth_quantity = json_data['sixth_quantity']
+    L50_quantity = json_data['L50_quantity']
+    half_quantity = json_data['half_quantity']
+    case_quantity = json_data['case_quantity']
+
     cost = json_data['cost']
     user_id = json_data['user_id']
     beer_id = json_data['beer_id']
@@ -47,32 +50,21 @@ def createOrder():
     
     print(order_number)
 
-    order = Order(order_number=order_number,item=item, quantity=quantity, cost=cost, fulfilled=False,
-    user_id=user_id, beer_id=beer_id, brewery_id=brewery_id, address_id=address_id)
+    order = Order(order_number=order_number, sixth_quantity=sixth_quantity, 
+    L50_quantity=L50_quantity, half_quantity=half_quantity,case_quantity=case_quantity,
+    cost=cost, fulfilled=False,user_id=user_id, beer_id=beer_id, brewery_id=brewery_id, 
+    address_id=address_id)
 
-    #new_inventory = Inventory.query.filter(Inventory.beer_id == order.beer_id).first()
-    #new_inventory.getattr(Inventory,item) -= quantity
-    test = getattr(Inventory,item)
-    old_item_count = Inventory.query.filter_by(beer_id = order.beer_id).first().case
+    old_inventory = Inventory.query.filter_by(beer_id = beer_id).first()
 
-    print(old_item_count)
-    print(test)
+    old_inventory.sixth -=  sixth_quantity
+    old_inventory.L50 -=  L50_quantity
+    old_inventory.half -=  half_quantity
+    old_inventory.case -=  case_quantity
 
+    db.session.commit()
 
-
-    #db.session.query().filter(Inventory.beer_id == order.beer_id).update({test : getattr(Inventory,item) - quantity})
-    
-    #new_inventory = Inventory.query.filter(Inventory.beer_id == order.beer_id).first()
-
-    #new_item_quantity = getattr(Inventory,item) - quantity
-    #print(new_item_quantity)
-    #new_inventory = new_inventory.update(new_item_quantity)
-
-    #Inventory.query.filter(Inventory.beer_id == order.beer_id).first()
-    #inventory.getattr(Inventory, item) -= quantity
-    
-    #db.session.add(order)
-    #db.session.commit()
+          
 
     return jsonify({'success' : "Order submitted successfully"}), status.HTTP_201_CREATED 
     
