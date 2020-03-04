@@ -42,6 +42,12 @@ def createOrder():
     half_quantity = json_data['half_quantity']
     case_quantity = json_data['case_quantity']
 
+    if sixth_quantity == 0 and L50_quantity == 0 and half_quantity == 0 and case_quantity == 0:
+        return jsonify({ 'error' : "FormError", "message":"Please add items to your order",'status_code':400}), status.HTTP_400_BAD_REQUEST
+    
+    elif sixth_quantity == "" or L50_quantity == "" or half_quantity == "" or case_quantity == "":
+        return jsonify({ 'error' : "FormError", "message":"Please add items to your order",'status_code':400}), status.HTTP_400_BAD_REQUEST
+
     cost = json_data['cost']
     user_id = json_data['user_id']
     beer_id = json_data['beer_id']
