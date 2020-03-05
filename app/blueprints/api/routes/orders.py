@@ -36,16 +36,21 @@ def getOrders():
 
 @api.route('/orders/create', methods=['POST'])
 def createOrder():
+    header = request.headers['Authorization']
+    auth_token = header.split()[1]
+    jwt_data = guard.extract_jwt_token(auth_token)
+    user_id = jwt_data['id']
+
     json_data = request.get_json()
 
     order_number = ''.join(str(datetime.utcnow()).split())
     order_number = order_number[:10]
     order_number += randomStringDigits(6)
 
-    sixth_quantity = json_data['sixth_quantity']
-    L50_quantity = json_data['L50_quantity']
-    half_quantity = json_data['half_quantity']
-    case_quantity = json_data['case_quantity']
+    sixth_quantity = int(json_data['sixth_quantity'])
+    L50_quantity = int(json_data['L50_quantity'])
+    half_quantity = int(json_data['half_quantity'])
+    case_quantity = int(json_data['case_quantity'])
 
     if sixth_quantity == 0 and L50_quantity == 0 and half_quantity == 0 and case_quantity == 0:
         return jsonify({ 'error' : "FormError", "message":"Please add items to your order",'status_code':400}), status.HTTP_400_BAD_REQUEST
@@ -54,8 +59,9 @@ def createOrder():
         return jsonify({ 'error' : "FormError", "message":"Please add items to your order",'status_code':400}), status.HTTP_400_BAD_REQUEST
 
     cost = json_data['cost']
-    user_id = json_data['user_id']
     beer_id = json_data['beer_id']
+
+    #from beer id will be able to get these
     brewery_id = json_data['brewery_id']
     address_id = json_data['address_id']
     
