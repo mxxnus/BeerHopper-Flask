@@ -12,8 +12,13 @@ from datetime import datetime
 import random
 import string
 
-@api.route('/orders/<int:id>', methods=['GET'])
-def getUserOrders(id):
+@api.route('/orders', methods=['GET'])
+def getUserOrders():
+    header = request.headers['Authorization']
+    auth_token = header.split()[1]
+    jwt_data = guard.extract_jwt_token(auth_token)
+    id = jwt_data['id']
+
     user_orders = [i.infoDict() for i in db.session.query(Order).join(Brewery, 
     Brewery.id == Order.brewery_id).join(Beer, Beer.id == Order.beer_id).join(User,
      User.id == Order.user_id).join(Address, Address.id == Order.address_id).filter_by(user_id=id).all()]
@@ -70,8 +75,7 @@ def createOrder():
 
     db.session.commit()
 
-          
-
+        
     return jsonify({'success' : "Order submitted successfully"}), status.HTTP_201_CREATED 
     
 

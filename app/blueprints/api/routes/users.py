@@ -7,7 +7,7 @@ from flask_praetorian import auth_required
 from app.extensions import guard, db
 
 from app.models import User
-
+import jwt
 
 @api.route('/login', methods=['POST'])
 def login():
@@ -74,11 +74,19 @@ def register():
 
 
 
-@api.route('/user/<int:id>')
-def getUser(id):
-    user = User.query.get(id)
+@api.route('/user')
+@auth_required
+def getUser():
+    header = request.headers['Authorization']
+    auth_token = header.split()[1]
+    jwt_data = guard.extract_jwt_token(auth_token)
+    user_id = jwt_data['id']
+    
+
+    user = User.query.get(user_id)
     credentials = user.infoDict()
     return jsonify({'credentials':credentials})
+    
 
        
 @api.route('/protected')

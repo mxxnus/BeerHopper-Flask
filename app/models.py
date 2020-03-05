@@ -231,7 +231,8 @@ class Order(db.Model):
             L50_quantity=self.L50_quantity,
 
             cost = self.cost,
-            delivery_data=self.delivery_date,
+            delivery_date=self.delivery_date,
+            created_on = self.created_on,
 
             fulfilled = self.fulfilled,
 
