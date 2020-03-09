@@ -7,7 +7,7 @@ from config import Config
 
 from .extensions import db, guard, migrate
 
-from .commands import create_users, create_database, create_breweries, create_beers, create_inventory, create_addresses, create_orders
+from .commands import create_users, create_database, create_breweries, create_products, create_inventory, create_addresses, create_orders
 
 from .models import User
 
@@ -27,7 +27,7 @@ def create_app(config_class=Config):
     app.cli.add_command(create_users)
     app.cli.add_command(create_database)
     app.cli.add_command(create_breweries)
-    app.cli.add_command(create_beers)
+    app.cli.add_command(create_products)
     app.cli.add_command(create_inventory)
     app.cli.add_command(create_addresses)
     app.cli.add_command(create_orders)

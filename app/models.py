@@ -247,7 +247,7 @@ class Customer_Order_Products(db.Model):
     customer_orders = db.relationship("Customer_Orders", back_populates="customer_order_products")
 
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
-    product = db.relationship("Product", back_populates="customer_order_products")
+    products = db.relationship("Products", back_populates="customer_order_products")
 
 
 
@@ -297,8 +297,8 @@ Brewery.product_inventory = db.relationship("Product_Inventory", order_by = Prod
 Brewery.customer_orders =  db.relationship("Customer_Orders", order_by = Customer_Orders.id, back_populates = 'brewery')
 
 Products.product_inventory = db.relationship("Product_Inventory", order_by = Product_Inventory.id, back_populates = 'products')
-Products.customer_orders = db.relationship("Customer_Orders", order_by = Customer_Orders.id, back_populates = 'products')
-Products.customer_orders_products = db.relationship("Customer_Order_Products", order_by = Customer_Order_Products.id, back_populates = 'customer_orders' )
+#Products.customer_orders = db.relationship("Customer_Orders", order_by = Customer_Orders.id, back_populates = 'products')
+Products.customer_order_products = db.relationship("Customer_Order_Products", order_by = Customer_Order_Products.id, back_populates = 'products' )
 
 
 User.customer_orders = db.relationship("Customer_Orders", order_by = Customer_Orders.id, back_populates = 'user')
