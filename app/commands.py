@@ -2,7 +2,7 @@ import click
 from flask.cli import with_appcontext 
 
 from .extensions import guard, db
-from .models import User, Brewery, Products, Product_Inventory, Address, Customer_Orders
+from .models import User, Brewery, Products, Product_Inventory, Address, Customer_Orders, Customer_Order_Products
 
 @click.command(name='create_database')
 @with_appcontext
@@ -69,9 +69,9 @@ def create_inventory():
 @click.command(name='create_addresses')
 @with_appcontext
 def create_addresses():
-    one = Address(user_id=18,address="4205 Weaverton Lane",city="Columbus",state="Ohio", zipcode="43219")
-    two = Address(user_id=19,address="743 Parsons Ave",city="Columbus",state="Ohio", zipcode="43206")
-    three = Address(user_id=20,address="5511 New Albany Rd",city="New Albany",state="Ohio", zipcode="43054")
+    one = Address(user_id=1,address="4205 Weaverton Lane",city="Columbus",state="Ohio", zipcode="43219")
+    two = Address(user_id=2,address="743 Parsons Ave",city="Columbus",state="Ohio", zipcode="43206")
+    three = Address(user_id=3,address="5511 New Albany Rd",city="New Albany",state="Ohio", zipcode="43054")
 
     db.session.add_all([one, two, three])
     db.session.commit()
@@ -79,14 +79,26 @@ def create_addresses():
 @click.command(name='create_orders')
 @with_appcontext
 def create_orders():
-    one = Order(order_number="1",sixth_quantity=1, L50_quantity=1,half_quantity=1,
-    case_quantity=1, cost=129.99, fulfilled=False,user_id=18, beer_id=3, brewery_id=8, address_id=1)
+    one = Customer_Orders(order_number="1", cost=100 , status="Unfulfilled", user_id=1, 
+     brewery_id=1, address_id=1)
+   
 
-    two = Order(order_number="2",sixth_quantity=2, L50_quantity=2,half_quantity=2,
-    case_quantity=2, cost=234.99, fulfilled=False,user_id=18, beer_id=4, brewery_id=8, address_id=1)
+    two = Customer_Orders(order_number="2", cost=500 , status="Unfulfilled", user_id=2, 
+     brewery_id=2, address_id=2)
 
-    three = Order(order_number="3",sixth_quantity=3, L50_quantity=3,half_quantity=3,
-    case_quantity=3, cost=1233.99, fulfilled=False,user_id=19, beer_id=5, brewery_id=8, address_id=2)
+    three = Customer_Orders(order_number="3", cost=750 , status="Unfulfilled", user_id=3, 
+     brewery_id=3, address_id=3)
+
+    db.session.add_all([one, two, three])
+    db.session.commit()
+
+@click.command(name='create_orders_products')
+@with_appcontext
+def create_orders_products():
+    one = Customer_Order_Products(order_id="1", product_id = 5, quantity=1)
+    two = Customer_Order_Products(order_id="2", product_id = 10, quantity=3)
+    three = Customer_Order_Products(order_id="3", product_id = 13, quantity=3)
+
 
     db.session.add_all([one, two, three])
     db.session.commit()

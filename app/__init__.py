@@ -7,7 +7,7 @@ from config import Config
 
 from .extensions import db, guard, migrate
 
-from .commands import create_users, create_database, create_breweries, create_products, create_inventory, create_addresses, create_orders
+from .commands import create_users, create_database, create_breweries, create_products, create_inventory, create_addresses, create_orders, create_orders_products
 
 from .models import User
 
@@ -31,6 +31,7 @@ def create_app(config_class=Config):
     app.cli.add_command(create_inventory)
     app.cli.add_command(create_addresses)
     app.cli.add_command(create_orders)
+    app.cli.add_command(create_orders_products)
 
 
     from app.blueprints.api import api
