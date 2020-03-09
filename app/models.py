@@ -2,6 +2,45 @@ from app import db
 from datetime import datetime, timedelta
 from werkzeug.security import generate_password_hash, check_password_hash
 
+class Address(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    address = db.Column(db.String(50), nullable=False)
+    city= db.Column(db.String(50), nullable=False)
+    state= db.Column(db.String(50), nullable=False)
+    zipcode= db.Column(db.String(50), nullable=False)
+
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    user = db.relationship("User", back_populates="address")
+
+    def infoDict(self):
+        data = dict(
+            id = self.id,
+            user_id=self.user.id,
+            address=self.address,
+            city=self.city,
+            state=self.state,
+            zipcode=self.zipcode,
+            created_on=self.created_on
+        )
+        return data
+
+    @classmethod
+    def lookup(cls, email):
+        return cls.query.filter_by(email=email.lower()).one_or_none()
+
+   
+    @classmethod
+    def identify(cls, id):
+        return cls.query.filter_by(id=id).one_or_none()
+
+    @property
+    def rolenames(self):
+        return []
+
+    @property
+    def identity(self):
+        return self.id
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     password = db.Column(db.String(180), nullable=False)
@@ -135,7 +174,7 @@ class Products(db.Model):
 class Product_Inventory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer,nullable=False)
-    
+
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
     products = db.relationship("Products", back_populates="product_inventory")
 
@@ -241,7 +280,6 @@ class Customer_Orders(db.Model):
 
 class Customer_Order_Products(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-
     quantity = db.Column(db.Integer, nullable=False)
 
     #note the double underscore below.. maybe should bring in table names as var
@@ -251,47 +289,16 @@ class Customer_Order_Products(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
     products = db.relationship("Products", back_populates="customer_order_products")
 
+class Product_Prices(db.Model):
+    date_from = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
+    price = db.Column(db.Float, nullable=False)
+
+    product_id = db.Column(db.Integer,  db.ForeignKey("products.id"), primary_key=True)
+    products = db.relationship("Products", back_populates="product_prices")
 
 
 
-class Address(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    address = db.Column(db.String(50), nullable=False)
-    city= db.Column(db.String(50), nullable=False)
-    state= db.Column(db.String(50), nullable=False)
-    zipcode= db.Column(db.String(50), nullable=False)
-
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
-    user = db.relationship("User", back_populates="address")
-
-    def infoDict(self):
-        data = dict(
-            id = self.id,
-            user_id=self.user.id,
-            address=self.address,
-            city=self.city,
-            state=self.state,
-            zipcode=self.zipcode,
-            created_on=self.created_on
-        )
-        return data
-
-    @classmethod
-    def lookup(cls, email):
-        return cls.query.filter_by(email=email.lower()).one_or_none()
-
-   
-    @classmethod
-    def identify(cls, id):
-        return cls.query.filter_by(id=id).one_or_none()
-
-    @property
-    def rolenames(self):
-        return []
-
-    @property
-    def identity(self):
-        return self.id
 
 
 Brewery.products = db.relationship("Products", order_by = Products.id, back_populates = 'brewery')
@@ -301,7 +308,7 @@ Brewery.customer_orders =  db.relationship("Customer_Orders", order_by = Custome
 Products.product_inventory = db.relationship("Product_Inventory", order_by = Product_Inventory.id, back_populates = 'products')
 #Products.customer_orders = db.relationship("Customer_Orders", order_by = Customer_Orders.id, back_populates = 'products')
 Products.customer_order_products = db.relationship("Customer_Order_Products", order_by = Customer_Order_Products.id, back_populates = 'products' )
-
+Products.product_prices = db.relationship("Product_Prices",  order_by = Product_Prices.product_id, back_populates = 'products' )
 
 User.customer_orders = db.relationship("Customer_Orders", order_by = Customer_Orders.id, back_populates = 'user')
 User.address = db.relationship("Address", order_by = Address.id, back_populates = 'user')

@@ -2,7 +2,7 @@ import click
 from flask.cli import with_appcontext 
 
 from .extensions import guard, db
-from .models import User, Brewery, Products, Product_Inventory, Address, Customer_Orders, Customer_Order_Products
+from .models import User, Brewery, Products, Product_Inventory, Address, Customer_Orders, Customer_Order_Products, Product_Prices
 
 @click.command(name='create_database')
 @with_appcontext
@@ -98,7 +98,23 @@ def create_orders_products():
     one = Customer_Order_Products(order_id="1", product_id = 5, quantity=1)
     two = Customer_Order_Products(order_id="2", product_id = 10, quantity=3)
     three = Customer_Order_Products(order_id="3", product_id = 13, quantity=3)
-
-
     db.session.add_all([one, two, three])
+    db.session.commit()
+
+@click.command(name='create_product_prices')
+@with_appcontext
+def create_product_prices():
+    product_prices = []
+    one = product_prices.append(Product_Prices( product_id = 5, price =35.00 ))
+    two = product_prices.append(Product_Prices( product_id = 6 , price =95.00 ))
+    three = product_prices.append(Product_Prices( product_id = 7, price =120.00 ))
+    four = product_prices.append(Product_Prices( product_id = 8, price =30.00 ))
+    five = product_prices.append(Product_Prices( product_id = 9, price = 85.00))
+    six = product_prices.append(Product_Prices( product_id = 10, price = 95.00))
+    seven = product_prices.append(Product_Prices( product_id = 11, price = 28.00))
+    eight = product_prices.append(Product_Prices( product_id = 12, price = 75.00))
+    nine = product_prices.append(Product_Prices( product_id = 13, price = 90.00))
+
+    
+    db.session.add_all(product_prices)
     db.session.commit()
