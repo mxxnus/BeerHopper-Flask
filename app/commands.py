@@ -32,21 +32,38 @@ def create_breweries():
 @click.command(name='create_products')
 @with_appcontext
 def create_products():
-    one = Products(name="HopWired",brewery_id=1, )
-    two = Products(name="Lineage Pale Ale",brewery_id=2 )
-    three = Products(name="Brew Dogs Indian Pale Ale", brewery_id=3)
+    one = Products(name="HopWired",brewery_id=1, product_type=1)
+    two = Products(name="HopWired",brewery_id=1, product_type=2)
+    three = Products(name="HopWired",brewery_id=1, product_type=3)
 
-    db.session.add_all([one, two, three])
+
+    #five = Products(name="Pale Ale",brewery_id=2, product_type=1)
+    #six = Products(name="Pale Ale",brewery_id=2, product_type=2 )
+    #seven = Products(name="Pale Ale", brewery_id=2, product_type=3)
+
+    five = Products(name="Indian Pale Ale",brewery_id=3, product_type=1)
+    six = Products(name="Indian Pale Ale",brewery_id=3, product_type=2 )
+    seven = Products(name="Indian Pale Ale", brewery_id=3, product_type=3)
+
+    db.session.add_all([ one, two, three, five, six, seven])
     db.session.commit()
 
 @click.command(name='create_inventory')
 @with_appcontext
 def create_inventory():
-    one = Inventory(brewery_id=8, sixth= 5, L50=10, half=0, case=45, beer_id=3,)
-    two = Inventory(brewery_id=9, sixth=34 , L50=43, half=3, case=255, beer_id=4)
-    three = Inventory(brewery_id=10, sixth=199, L50=323, half=23, case=899, beer_id=5)
+    one = Product_Inventory(brewery_id=1, quantity=30 ,product_id=5,)
+    two= Product_Inventory(brewery_id=1, quantity=30 ,product_id=6,)
+    three = Product_Inventory(brewery_id=1, quantity=30 ,product_id=7,)
 
-    db.session.add_all([one, two, three])
+    four = Product_Inventory(brewery_id=2, quantity=100 ,product_id=8)
+    five = Product_Inventory(brewery_id=2, quantity=100 ,product_id=9)
+    six = Product_Inventory(brewery_id=2, quantity=100 ,product_id=10)
+
+    seven = Product_Inventory(brewery_id=3, quantity=300 ,product_id=11)
+    eight = Product_Inventory(brewery_id=3, quantity=300 ,product_id=12)
+    nine = Product_Inventory(brewery_id=3, quantity=300 ,product_id=13)
+
+    db.session.add_all([four,five,six,seven,eight,nine])
     db.session.commit()
 
 @click.command(name='create_addresses')

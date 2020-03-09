@@ -102,6 +102,7 @@ class Brewery(db.Model):
 class Products(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
+    product_type = db.Column(db.String(50), nullable=False)
 
     brewery_id = db.Column(db.Integer, db.ForeignKey("brewery.id"))
     brewery = db.relationship("Brewery", back_populates="products")
@@ -133,6 +134,7 @@ class Products(db.Model):
 
 class Product_Inventory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    quantity = db.Column(db.Integer,nullable=False)
     
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
     products = db.relationship("Products", back_populates="product_inventory")
