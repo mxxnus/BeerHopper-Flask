@@ -12,6 +12,7 @@ from datetime import datetime
 import random
 import string
 
+#comment
 @api.route('/orders', methods=['GET'])
 def getUserOrders():
     header = request.headers['Authorization']
@@ -58,8 +59,10 @@ def createOrder():
     elif sixth_quantity == "" or L50_quantity == "" or half_quantity == "" or case_quantity == "":
         return jsonify({ 'error' : "FormError", "message":"Please add items to your order",'status_code':400}), status.HTTP_400_BAD_REQUEST
 
+
     cost = json_data['cost']
     beer_id = json_data['beer_id']
+    print(beer_id)
 
     #from beer id will be able to get these
     brewery_id = json_data['brewery_id']
@@ -80,8 +83,6 @@ def createOrder():
     old_inventory.case -=  case_quantity
 
     db.session.commit()
-
-        
     return jsonify({'success' : "Order submitted successfully"}), status.HTTP_201_CREATED 
     
 
