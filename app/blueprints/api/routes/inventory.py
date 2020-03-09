@@ -6,7 +6,7 @@ from app.blueprints.api import api
 from flask_praetorian import auth_required
 from app.extensions import guard, db
 
-from app.models import User, Brewery, Beer, Inventory
+from app.models import User, Brewery
 
 @api.route('/inventory', methods=['GET'])
 def inventory():

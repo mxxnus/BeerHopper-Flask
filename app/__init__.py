@@ -9,7 +9,7 @@ from .extensions import db, guard, migrate
 
 from .commands import create_users, create_database, create_breweries, create_beers, create_inventory, create_addresses, create_orders
 
-from .models import User, Brewery, Beer, Inventory, Order, Address
+from .models import User
 
 basedir = os.path.dirname(os.path.abspath(__file__))
 
