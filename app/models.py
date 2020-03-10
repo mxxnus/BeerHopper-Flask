@@ -187,12 +187,12 @@ class Product_Inventory(db.Model):
     def infoDict(self):
         data = dict(
             id = self.id,
-
             brewery_id=self.brewery.id,
             brewery=self.brewery.name,
-
-            product_id=self.product.id,
-            product_name=self.product.name
+            product_id=self.products.id,
+            product_name=self.products.name,
+            product_type=self.products.product_type,
+            quantity=self.quantity
         )
         return data
 
@@ -306,7 +306,6 @@ Brewery.product_inventory = db.relationship("Product_Inventory", order_by = Prod
 Brewery.customer_orders =  db.relationship("Customer_Orders", order_by = Customer_Orders.id, back_populates = 'brewery')
 
 Products.product_inventory = db.relationship("Product_Inventory", order_by = Product_Inventory.id, back_populates = 'products')
-#Products.customer_orders = db.relationship("Customer_Orders", order_by = Customer_Orders.id, back_populates = 'products')
 Products.customer_order_products = db.relationship("Customer_Order_Products", order_by = Customer_Order_Products.id, back_populates = 'products' )
 Products.product_prices = db.relationship("Product_Prices",  order_by = Product_Prices.product_id, back_populates = 'products' )
 
