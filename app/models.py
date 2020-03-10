@@ -294,7 +294,7 @@ class Customer_Order_Products(db.Model):
 
     def productDict(self):
         product_Data = dict(
-            product = self.product_id,
+            product_id = self.product_id,
             quantity = self.quantity
         )
         return product_Data

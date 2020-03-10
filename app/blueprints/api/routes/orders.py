@@ -13,39 +13,39 @@ import random
 import string
 
 
-'''
+
 @api.route('/orders', methods=['GET'])
 def getUserOrders():
     header = request.headers['Authorization']
     auth_token = header.split()[1]
     jwt_data = guard.extract_jwt_token(auth_token)
     id = jwt_data['id']
+    user_orders = [i.infoDict() for i in db.session.query(Customer_Orders).join(Brewery, 
+    Brewery.id == Customer_Orders.brewery_id).join(User,User.id == Customer_Orders.user_id)
+    .join(Address, Address.id == Customer_Orders.address_id).filter_by(user_id=id).all()]
 
+    return jsonify(user_orders)
+
+'''
     user_orders = [i.infoDict() for i in db.session.query(Order).join(Brewery, 
     Brewery.id == Order.brewery_id).join(Beer, Beer.id == Order.beer_id).join(User,
      User.id == Order.user_id).join(Address, Address.id == Order.address_id).filter_by(user_id=id).all()]
+
     
-    return jsonify(user_orders)
-'''
-#does not include products list
+    
+
+    
+    
+
+#includes products by calling a Customer_Order_Products method in the Customer_Orders class
 @api.route('/orders', methods=['GET'])
 def getOrders():
-    '''
-    orders = [i.infoDict() for i in db.session.query(Customer_Orders).join(Brewery, 
-    Brewery.id == Customer_Orders.brewery_id).join(User,
-    User.id == Customer_Orders.user_id).join(Address, Address.id == Customer_Orders.address_id)
-    .all()]
-    '''
+    
     orders = [i.infoDict() for i in db.session.query(Customer_Orders).join(Brewery, 
     Brewery.id == Customer_Orders.brewery_id).join(User,
     User.id == Customer_Orders.user_id).join(Address, Address.id == Customer_Orders.address_id)
     .all()]
 
-    '''
-    test = db.session.query(Customer_Order_Products).join(Customer_Orders, Customer_Order_Products.order_id == Customer_Orders.id).join(Brewery, Brewery.id == Customer_Orders.brewery_id).join(User,User.id == Customer_Orders.user_id).join(Address, Address.id == Customer_Orders.address_id).all()
-    '''
-    #print(test[0])
-    #join(Customer_Order_Products, Customer_Order_Products.order_id == Customer_Orders.id)
     return jsonify(orders)
 
 
@@ -120,4 +120,4 @@ def randomStringDigits(stringLength=6):
 #cost calc with order/beer_id/item/quantity * query(beer_id.cost)
 #add to db
 #modify inventory (same beer_id)
-     
+'''
