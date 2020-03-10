@@ -232,27 +232,20 @@ class Customer_Orders(db.Model):
 
     address_id = db.Column(db.Integer, db.ForeignKey("address.id"))
     address = db.relationship("Address", back_populates="customer_orders")
+
+    #products_list = db.relationship('Customer_Order_Products', backref="customer_orders",
+    #cascade="all, delete-orphan" , lazy='dynamic')
     
     def __repr__(self):
         return f"<User:{self.id}"
 
     def infoDict(self):
-        data = dict(
-            id = self.id,
-            order_number=self.order_number,
+        order_id=self.id
 
-            cost = self.cost,
-            delivery_date=self.delivery_date,
-            created_on = self.created_on,
-            status = self.status,
+        products_data = [i.productDict() for i in db.session.query(Customer_Order_Products).filter_by(order_id=order_id).all()]
+        
 
-            
-            user_id = self.user.id,
-            user_address = self.address.address,
-            user_city = self.address.city,
-            user_state = self.address.state,
-            user_zipcode = self.address.zipcode,
-
+        brewery_data = dict(
             brewery_id=self.brewery.id,
             brewery=self.brewery.name,
             brewery_address= self.brewery.address,
@@ -260,22 +253,32 @@ class Customer_Orders(db.Model):
             brewery_state= self.brewery.state,
             brewery_zipcode= self.brewery.zipcode,
             brewery_email= self.brewery.email
+        )
+        user_data = dict(
+            user_id = self.user.id,
+            user_address = self.address.address,
+            user_city = self.address.city,
+            user_state = self.address.state,
+            user_zipcode = self.address.zipcode
+        )
 
+        data = dict(
+            id = self.id,
+            order_number=self.order_number,
+
+            products_data = products_data,
+
+            cost = self.cost,
+            delivery_date=self.delivery_date,
+            created_on = self.created_on,
+            status = self.status,
+
+            brewery_data = brewery_data,
+            user_data =  user_data
+        
         )
         return data
 
-    
-    @classmethod
-    def identify(cls, id):
-        return cls.query.filter_by(id=id).one_or_none()
-
-    @property
-    def rolenames(self):
-        return []
-
-    @property
-    def identity(self):
-        return self.id
 
 
 class Customer_Order_Products(db.Model):
@@ -288,6 +291,14 @@ class Customer_Order_Products(db.Model):
 
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
     products = db.relationship("Products", back_populates="customer_order_products")
+
+    def productDict(self):
+        product_Data = dict(
+            product = self.product_id,
+            quantity = self.quantity
+        )
+        return product_Data
+        
 
 class Product_Prices(db.Model):
     date_from = db.Column(db.DateTime, nullable=False,

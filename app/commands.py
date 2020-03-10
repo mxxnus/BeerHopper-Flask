@@ -98,7 +98,9 @@ def create_orders_products():
     one = Customer_Order_Products(order_id="1", product_id = 5, quantity=1)
     two = Customer_Order_Products(order_id="2", product_id = 10, quantity=3)
     three = Customer_Order_Products(order_id="3", product_id = 13, quantity=3)
-    db.session.add_all([one, two, three])
+    four = Customer_Order_Products(order_id="3", product_id = 12, quantity=2)
+
+    db.session.add_all([one, two, three, four])
     db.session.commit()
 
 @click.command(name='create_product_prices')

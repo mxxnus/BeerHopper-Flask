@@ -11,7 +11,8 @@ from app.models import User, Product_Inventory, Products, Brewery
 @api.route('/inventory', methods=['GET'])
 def inventory():
     inven= [i.infoDict() for i in db.session.query(Product_Inventory).join(Brewery, 
-    Brewery.id == Product_Inventory.brewery_id).join(Products, Products.id == Product_Inventory.product_id).all()]
+    Brewery.id == Product_Inventory.brewery_id).join(Products, Products.id == 
+    Product_Inventory.product_id).all()]
     
     return jsonify(inven)
 
