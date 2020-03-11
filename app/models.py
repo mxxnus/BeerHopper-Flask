@@ -211,8 +211,8 @@ class Product_Inventory(db.Model):
     
 
 class Customer_Orders(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    order_number = db.Column(db.String(50), nullable=False)
+    id = db.Column(db.Integer,nullable=False, primary_key=True,)
+    order_number = db.Column(db.String(50), nullable=False,   unique=True)
     
     
     cost=db.Column(db.Float, nullable=False)
@@ -266,7 +266,7 @@ class Customer_Orders(db.Model):
             id = self.id,
             order_number=self.order_number,
 
-            products_data = products_data,
+            products = products_data,
 
             cost = self.cost,
             delivery_date=self.delivery_date,
@@ -284,9 +284,10 @@ class Customer_Orders(db.Model):
 class Customer_Order_Products(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
+    order_number = db.Column(db.String(50),nullable=False )
 
     #note the double underscore below.. maybe should bring in table names as var
-    order_id = db.Column(db.Integer, db.ForeignKey("customer__orders.id"))
+    order_id = db.Column(db.String(50), db.ForeignKey("customer__orders.id"))
     customer_orders = db.relationship("Customer_Orders", back_populates="customer_order_products")
 
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"))
@@ -326,7 +327,7 @@ User.address = db.relationship("Address", order_by = Address.id, back_populates 
 Address.user = db.relationship("User", order_by = User.id, back_populates = 'address')
 Address.customer_orders = db.relationship("Customer_Orders", order_by = Customer_Orders.id, back_populates = 'address')
 
-Customer_Orders.customer_order_products = db.relationship("Customer_Order_Products", order_by = Customer_Order_Products.id, back_populates = 'customer_orders' )
+Customer_Orders.customer_order_products = db.relationship("Customer_Order_Products", order_by = Customer_Order_Products.order_id, back_populates = 'customer_orders' )
 
 
 

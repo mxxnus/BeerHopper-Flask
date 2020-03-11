@@ -20,6 +20,7 @@ def getUserOrders():
     auth_token = header.split()[1]
     jwt_data = guard.extract_jwt_token(auth_token)
     id = jwt_data['id']
+
     user_orders = [i.infoDict() for i in db.session.query(Customer_Orders).join(Brewery, 
     Brewery.id == Customer_Orders.brewery_id).join(User,User.id == Customer_Orders.user_id)
     .join(Address, Address.id == Customer_Orders.address_id).filter_by(user_id=id).all()]
@@ -27,15 +28,6 @@ def getUserOrders():
     return jsonify(user_orders)
 
 '''
-    user_orders = [i.infoDict() for i in db.session.query(Order).join(Brewery, 
-    Brewery.id == Order.brewery_id).join(Beer, Beer.id == Order.beer_id).join(User,
-     User.id == Order.user_id).join(Address, Address.id == Order.address_id).filter_by(user_id=id).all()]
-
-    
-    
-
-    
-    
 
 #includes products by calling a Customer_Order_Products method in the Customer_Orders class
 @api.route('/orders', methods=['GET'])
@@ -47,31 +39,65 @@ def getOrders():
     .all()]
 
     return jsonify(orders)
+'''
 
 
-'''
-@api.route('/orders', methods=['GET'])
-def getOrders():
-    orders = [i.infoDict() for i in db.session.query(Order).join(Brewery, 
-    Brewery.id == Order.brewery_id).join(Beer, Beer.id == Order.beer_id).join(User,
-     User.id == Order.user_id).join(Address, Address.id == Order.address_id).all()]
-    
-    return jsonify(orders)
-'''
 
 @api.route('/orders/create', methods=['POST'])
 def createOrder():
+    #Destructure req header
     header = request.headers['Authorization']
     auth_token = header.split()[1]
     jwt_data = guard.extract_jwt_token(auth_token)
     user_id = jwt_data['id']
 
-    json_data = request.get_json()
-
+    #generate order number
     order_number = ''.join(str(datetime.utcnow()).split())
     order_number = order_number[:10]
     order_number += randomStringDigits(6)
 
+    #generate order id 
+    order_id = randomDigits(8)
+
+    #Get rest of order details from req json
+    json_data = request.get_json()
+    cost = json_data['cost']
+    brewery_id = json_data['brewery_id']
+    address_id = json_data['address_id']
+
+    order = Customer_Orders(id = order_id, order_number=order_number,
+    cost=cost, status="Unfulfilled",user_id=user_id,brewery_id=brewery_id, 
+    address_id=address_id)
+
+    db.session.add(order)
+
+
+    #Gets products from req json to add to Customer_Order_Products table
+    products = json_data['products']
+    products_list = []
+
+    for i in products:
+        product_id = i['product_id']
+        quantity = i['quantity']
+        customer_order_products = Customer_Order_Products(order_id = order_id, product_id=product_id, quantity=quantity, order_number = order_number)
+        products_list.append(customer_order_products)
+
+        #Subtracts quantities from products_inventory
+        old_product_inventory = Product_Inventory.query.filter_by(product_id = product_id).first()
+        old_product_inventory.quantity -= quantity
+
+    db.session.add_all(products_list)
+
+
+    
+    
+
+    db.session.commit()
+
+
+    return jsonify({'success' : "Order submitted successfully"}), status.HTTP_201_CREATED 
+
+    '''
     sixth_quantity = int(json_data['sixth_quantity'])
     L50_quantity = int(json_data['L50_quantity'])
     half_quantity = int(json_data['half_quantity'])
@@ -109,15 +135,19 @@ def createOrder():
     db.session.commit()
     return jsonify({'success' : "Order submitted successfully"}), status.HTTP_201_CREATED 
     
-
+'''
 def randomStringDigits(stringLength=6):
     """Generate a random string of letters and digits """
     lettersAndDigits = string.ascii_letters + string.digits
     return ''.join(random.choice(lettersAndDigits).upper() for i in range(stringLength))
+
+def randomDigits(stringLength=8):
+    """Generate a random string of letters and digits """
+    onlyDigits =  string.digits
+    return ''.join(random.choice(onlyDigits) for i in range(stringLength))
 
 #CREATE AN ORDER
 #generate order_id timestamp + random stuff
 #cost calc with order/beer_id/item/quantity * query(beer_id.cost)
 #add to db
 #modify inventory (same beer_id)
-'''
