@@ -32,36 +32,36 @@ def create_breweries():
 @click.command(name='create_products')
 @with_appcontext
 def create_products():
-    one = Products(name="HopWired",brewery_id=1, product_type=1)
-    two = Products(name="HopWired",brewery_id=1, product_type=2)
-    three = Products(name="HopWired",brewery_id=1, product_type=3)
+    one = Products(name="HopWired",brewery_id=1, product_type=1, price_id=20)
+    two = Products(name="HopWired",brewery_id=1, product_type=2, price_id=21)
+    three = Products(name="HopWired",brewery_id=1, product_type=3, price_id=22)
 
 
-    #five = Products(name="Pale Ale",brewery_id=2, product_type=1)
-    #six = Products(name="Pale Ale",brewery_id=2, product_type=2 )
-    #seven = Products(name="Pale Ale", brewery_id=2, product_type=3)
+    five = Products(name="Pale Ale",brewery_id=2, product_type=1, price_id=23)
+    six = Products(name="Pale Ale",brewery_id=2, product_type=2 , price_id=24)
+    seven = Products(name="Pale Ale", brewery_id=2, product_type=3, price_id=25)
 
-    five = Products(name="Indian Pale Ale",brewery_id=3, product_type=1)
-    six = Products(name="Indian Pale Ale",brewery_id=3, product_type=2 )
-    seven = Products(name="Indian Pale Ale", brewery_id=3, product_type=3)
+    eight = Products(name="Indian Pale Ale",brewery_id=3, product_type=1, price_id=26)
+    nine = Products(name="Indian Pale Ale",brewery_id=3, product_type=2 , price_id=27)
+    ten = Products(name="Indian Pale Ale", brewery_id=3, product_type=3, price_id=28)
 
-    db.session.add_all([ one, two, three, five, six, seven])
+    db.session.add_all([ one, two, three, five, six, seven, eight, nine, ten])
     db.session.commit()
 
 @click.command(name='create_inventory')
 @with_appcontext
 def create_inventory():
-    one = Product_Inventory(brewery_id=1, quantity=30 ,product_id=5,)
-    two= Product_Inventory(brewery_id=1, quantity=30 ,product_id=6,)
-    three = Product_Inventory(brewery_id=1, quantity=30 ,product_id=7,)
+    one = Product_Inventory(brewery_id=1, quantity=30 ,product_id=15,)
+    two= Product_Inventory(brewery_id=1, quantity=30 ,product_id=16,)
+    three = Product_Inventory(brewery_id=1, quantity=30 ,product_id=17,)
 
-    four = Product_Inventory(brewery_id=2, quantity=100 ,product_id=8)
-    five = Product_Inventory(brewery_id=2, quantity=100 ,product_id=9)
-    six = Product_Inventory(brewery_id=2, quantity=100 ,product_id=10)
+    four = Product_Inventory(brewery_id=2, quantity=100 ,product_id=18)
+    five = Product_Inventory(brewery_id=2, quantity=100 ,product_id=19)
+    six = Product_Inventory(brewery_id=2, quantity=100 ,product_id=20)
 
-    seven = Product_Inventory(brewery_id=3, quantity=300 ,product_id=11)
-    eight = Product_Inventory(brewery_id=3, quantity=300 ,product_id=12)
-    nine = Product_Inventory(brewery_id=3, quantity=300 ,product_id=13)
+    seven = Product_Inventory(brewery_id=3, quantity=300 ,product_id=21)
+    eight = Product_Inventory(brewery_id=3, quantity=300 ,product_id=22)
+    nine = Product_Inventory(brewery_id=3, quantity=300 ,product_id=23)
 
     db.session.add_all([four,five,six,seven,eight,nine])
     db.session.commit()
@@ -107,15 +107,15 @@ def create_orders_products():
 @with_appcontext
 def create_product_prices():
     product_prices = []
-    one = product_prices.append(Product_Prices( product_id = 5, price =35.00 ))
-    two = product_prices.append(Product_Prices( product_id = 6 , price =95.00 ))
-    three = product_prices.append(Product_Prices( product_id = 7, price =120.00 ))
-    four = product_prices.append(Product_Prices( product_id = 8, price =30.00 ))
-    five = product_prices.append(Product_Prices( product_id = 9, price = 85.00))
-    six = product_prices.append(Product_Prices( product_id = 10, price = 95.00))
-    seven = product_prices.append(Product_Prices( product_id = 11, price = 28.00))
-    eight = product_prices.append(Product_Prices( product_id = 12, price = 75.00))
-    nine = product_prices.append(Product_Prices( product_id = 13, price = 90.00))
+    one = product_prices.append(Product_Prices( id =20 , price =35.00 ))
+    two = product_prices.append(Product_Prices( id =21 , price =95.00 ))
+    three = product_prices.append(Product_Prices( id =22 ,price =120.00 ))
+    four = product_prices.append(Product_Prices(id =23 , price =30.00 ))
+    five = product_prices.append(Product_Prices( id =24 ,price = 85.00))
+    six = product_prices.append(Product_Prices( id =25 ,price = 95.00))
+    seven = product_prices.append(Product_Prices( id =26 ,price = 28.00))
+    eight = product_prices.append(Product_Prices( id =27 ,price = 75.00))
+    nine = product_prices.append(Product_Prices(id =28 , price = 90.00))
 
     
     db.session.add_all(product_prices)

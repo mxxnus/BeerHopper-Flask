@@ -29,17 +29,6 @@ class Address(db.Model):
         return cls.query.filter_by(email=email.lower()).one_or_none()
 
    
-    @classmethod
-    def identify(cls, id):
-        return cls.query.filter_by(id=id).one_or_none()
-
-    @property
-    def rolenames(self):
-        return []
-
-    @property
-    def identity(self):
-        return self.id
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -139,21 +128,24 @@ class Brewery(db.Model):
 #)
 
 class Products(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True,unique=True)
     name = db.Column(db.String(50), nullable=False)
     product_type = db.Column(db.String(50), nullable=False)
 
     brewery_id = db.Column(db.Integer, db.ForeignKey("brewery.id"))
     brewery = db.relationship("Brewery", back_populates="products")
-    
-    def __repr__(self):
-        return f"<User:{self.email} | {self.fname}>"
 
+    price_id = db.Column(db.Integer, db.ForeignKey("product__prices.id"))
+    product_prices = db.relationship("Product_Prices", back_populates="products")
+
+    
     def infoDict(self):
         data = dict(
             id = self.id,
             name=self.name,
-            brewery=self.brewery.name
+            brewery=self.brewery.name,
+            product_type = self.product_type,
+            price = self.product_prices.price
         )
         return data
 
@@ -302,14 +294,16 @@ class Customer_Order_Products(db.Model):
         
 
 class Product_Prices(db.Model):
+    id = db.Column(db.Integer, primary_key=True,unique=True)
     date_from = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
     price = db.Column(db.Float, nullable=False)
 
-    product_id = db.Column(db.Integer,  db.ForeignKey("products.id"), primary_key=True)
-    products = db.relationship("Products", back_populates="product_prices")
+    #product_id = db.Column(db.Integer,  db.ForeignKey("products.id"),nullable=False)
+    #products = db.relationship("Products", back_populates="product_prices")
 
 
+    
 
 
 
@@ -319,7 +313,10 @@ Brewery.customer_orders =  db.relationship("Customer_Orders", order_by = Custome
 
 Products.product_inventory = db.relationship("Product_Inventory", order_by = Product_Inventory.id, back_populates = 'products')
 Products.customer_order_products = db.relationship("Customer_Order_Products", order_by = Customer_Order_Products.id, back_populates = 'products' )
-Products.product_prices = db.relationship("Product_Prices",  order_by = Product_Prices.product_id, back_populates = 'products' )
+#Products.product_prices = db.relationship("Product_Prices",  order_by = Product_Prices.id, back_populates = 'products' )
+
+Product_Prices.products = db.relationship("Products",  order_by = Products.id, back_populates = 'product_prices' )
+
 
 User.customer_orders = db.relationship("Customer_Orders", order_by = Customer_Orders.id, back_populates = 'user')
 User.address = db.relationship("Address", order_by = Address.id, back_populates = 'user')

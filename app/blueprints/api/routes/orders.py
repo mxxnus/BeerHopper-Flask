@@ -82,20 +82,27 @@ def createOrder():
         customer_order_products = Customer_Order_Products(order_id = order_id, product_id=product_id, quantity=quantity, order_number = order_number)
         products_list.append(customer_order_products)
 
-        #Subtracts quantities from products_inventory
+        #Subtracts quantities from products_inventory table
         old_product_inventory = Product_Inventory.query.filter_by(product_id = product_id).first()
         old_product_inventory.quantity -= quantity
 
     db.session.add_all(products_list)
 
-
-    
-    
-
     db.session.commit()
 
 
     return jsonify({'success' : "Order submitted successfully"}), status.HTTP_201_CREATED 
+
+
+def randomStringDigits(stringLength=6):
+    """Generate a random string of letters and digits """
+    lettersAndDigits = string.ascii_letters + string.digits
+    return ''.join(random.choice(lettersAndDigits).upper() for i in range(stringLength))
+
+def randomDigits(stringLength=8):
+    """Generate a random string of letters and digits """
+    onlyDigits =  string.digits
+    return ''.join(random.choice(onlyDigits) for i in range(stringLength))
 
     '''
     sixth_quantity = int(json_data['sixth_quantity'])
@@ -136,18 +143,3 @@ def createOrder():
     return jsonify({'success' : "Order submitted successfully"}), status.HTTP_201_CREATED 
     
 '''
-def randomStringDigits(stringLength=6):
-    """Generate a random string of letters and digits """
-    lettersAndDigits = string.ascii_letters + string.digits
-    return ''.join(random.choice(lettersAndDigits).upper() for i in range(stringLength))
-
-def randomDigits(stringLength=8):
-    """Generate a random string of letters and digits """
-    onlyDigits =  string.digits
-    return ''.join(random.choice(onlyDigits) for i in range(stringLength))
-
-#CREATE AN ORDER
-#generate order_id timestamp + random stuff
-#cost calc with order/beer_id/item/quantity * query(beer_id.cost)
-#add to db
-#modify inventory (same beer_id)
