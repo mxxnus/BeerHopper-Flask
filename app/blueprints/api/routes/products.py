@@ -22,14 +22,21 @@ def products():
     
 @api.route('/unique_products', methods=['GET'])
 def unique_products():
-    #[i.infoDict() for i in Beer.query.all()]
     
     products= [i.infoDict() for i in db.session.query(Products).distinct(Products.name).join(Brewery, 
     Brewery.id == Products.brewery_id).join(Product_Prices, Product_Prices.id == Products.price_id).all()]
 
     return jsonify(products)    
     
+
+#case sensitive
+@api.route('/products/<product_name>', methods=['GET'])
+def one_product(product_name):
     
+    products= [i.infoDict() for i in db.session.query(Products).filter_by(name=product_name).join(Brewery, 
+    Brewery.id == Products.brewery_id).join(Product_Prices, Product_Prices.id == Products.price_id).all()]
+
+    return jsonify(products)    
     '''
     
 
